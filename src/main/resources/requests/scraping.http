@@ -1,0 +1,2 @@
+#GET http://localhost:8080/job-site-scraping/parse-search-page
+#GET http://localhost:8080/job-site-scraping/parse-vacancies
