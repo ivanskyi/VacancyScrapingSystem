@@ -85,6 +85,7 @@ public class VacancyParseFactory {
         return vacancyRepository.findAll()
                 .stream()
                 .filter(a -> Objects.nonNull(a.getVacancyURL()))
+                .filter(a -> Objects.isNull(a.getPostedDate()))
                 .filter(a -> a.getVacancyURL().contains(APPLYING_LINK_PART_OF_VACANCY))
                 .collect(Collectors.toList());
     }

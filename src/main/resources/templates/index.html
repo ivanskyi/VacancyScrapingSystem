@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vacancy Scraping System</title>
+    <style>
+        :root {
+            --primary-color: #000000;
+            --accent-color: #ffffff;
+            --text-color: #333333;
+            --background-color: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        input[type="text"],
+        select {
+            padding: 5px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        input[type="submit"] {
+            background-color: var(--primary-color);
+            color: var(--accent-color);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--background-color);
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: var(--background-color);
+        }
+
+        .compact-search-form {
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .compact-search-form label,
+        .compact-search-form input[type="text"],
+        .compact-search-form input[type="submit"] {
+            display: block;
+            margin: 0;
+            width: 100%;
+        }
+
+        .compact-search-form input[type="text"] {
+            margin-bottom: 5px;
+        }
+
+        @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+
+        .mdc-button {
+            display: inline-block;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            border: 2px solid var(--primary-color);
+            padding: 10px 20px;
+            min-width: 140px;
+            color: var(--primary-color);
+            background-color: var(--accent-color);
+            transition: background-color 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .mdc-button:hover {
+            background-color: var(--primary-color);
+            color: var(--accent-color);
+        }
+
+        .mdc-button:active {
+            background-color: var(--primary-color);
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        .mdc-button--outlined {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .mdc-button--outlined:hover {
+            background-color: var(--primary-color);
+            color: var(--accent-color);
+        }
+
+        .mdc-button--outlined:active {
+            background-color: var(--primary-color);
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        .centered-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="logo">Vacancy Scraping System</div>
+<div class="centered-form">
+    <form>
+        <button type="submit" formaction="/job-site-scraping/parse-search-page" class="mdc-button mdc-button--outlined">
+            Parse list of vacancies
+        </button>
+        <button type="submit" formaction="/job-site-scraping/parse-vacancies" class="mdc-button mdc-button--outlined">
+            Parse vacancies details
+        </button>
+    </form>
+</div>
+<form th:action="@{/sort}" method="get" class="compact-search-form">
+    <label for="sortBy">Sort By:</label>
+    <select name="sortBy" id="sortBy">
+        <option value="positionName">Position Name</option>
+        <option value="organizationTitle">Organization Title</option>
+        <option value="laborFunction">Labor Function</option>
+        <option value="postedDate">Posted Date</option>
+    </select>
+    <select name="sortOrder" id="sortOrder">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+    <input type="submit" value="Sort">
+</form>
+<form th:action="@{/search}" method="get" class="compact-search-form">
+    <label for="searchQuery">Search:</label>
+    <input type="text" id="searchQuery" name="searchQuery" placeholder="Java developer" th:value="${searchQuery}">
+    <input type="submit" value="Search">
+</form>
+<table>
+    <tr>
+        <th>Position Name</th>
+        <th>Posted Date</th>
+        <th>Organization Title</th>
+        <th>Labor Function</th>
+        <th>URL</th>
+    </tr>
+    <tr th:each="vacancy : ${vacancies}">
+        <td th:text="${vacancy.positionName}"></td>
+        <td th:text="${vacancy.postedDate}"></td>
+        <td th:text="${vacancy.organizationTitle}"></td>
+        <td th:text="${vacancy.laborFunction}"></td>
+        <td>
+            <a th:href="${vacancy.vacancyURL}" target="_blank">
+                <button class="mdc-button mdc-button--outlined">Visit</button>
+            </a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

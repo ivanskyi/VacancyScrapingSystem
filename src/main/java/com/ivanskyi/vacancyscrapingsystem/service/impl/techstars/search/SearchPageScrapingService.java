@@ -111,6 +111,7 @@ public class SearchPageScrapingService implements ScrapingService {
             if (getCurrentPageNumber(driver) > lastParsedPage) {
                 lastParsedPage = getCurrentPageNumber(driver);
                 logger.info("Current page number is: {}", getCurrentPageNumber(driver));
+                DelayUtil.startFiveSecondsDelay();
                 parseGeneralInformationAboutVacancies(driver);
             }
         }
